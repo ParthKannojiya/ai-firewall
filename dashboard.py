@@ -1,5 +1,4 @@
 import streamlit as st
-import sqlite3
 import pandas as pd
 import requests
 
@@ -11,9 +10,13 @@ st.set_page_config(page_title="AI Firewall", layout="wide")
 
 st.title("🔥 AI Firewall Control Panel")
 
-API_URL = "http://127.0.0.1:5000/predict"
-UNBLOCK_URL = "http://127.0.0.1:5000/unblock?all=true"
-RETRAIN_URL = "http://127.0.0.1:5000/retrain_count"
+# 🔥 USE YOUR LIVE RENDER URL HERE
+API_BASE = "https://your-render-app.onrender.com"
+
+API_URL = f"{API_BASE}/predict"
+UNBLOCK_URL = f"{API_BASE}/unblock?all=true"
+RETRAIN_URL = f"{API_BASE}/retrain_count"
+LOGS_URL = f"{API_BASE}/logs"
 
 # 🧪 Test panel
 st.sidebar.header("🧪 Test Firewall")
@@ -52,9 +55,13 @@ except:
 
 st.metric("🔁 Retrain Count", retrain_count)
 
-# 📊 Load DB
-conn = sqlite3.connect("../backend/database.db")
-df = pd.read_sql_query("SELECT * FROM logs", conn)
+# 🔥 📊 LOAD DATA FROM BACKEND API (FIXED)
+try:
+    res = requests.get(LOGS_URL)
+    data = res.json()
+    df = pd.DataFrame(data)
+except:
+    df = pd.DataFrame()
 
 # Handle empty DB
 if df.empty:
@@ -86,22 +93,16 @@ st.bar_chart(df["ip"].value_counts())
 st.subheader("🧠 Attack Reasons Analysis")
 
 if "reason" in df.columns:
-    reason_series = df["reason"].str.split(", ").explode()
+    reason_series = df["reason"].astype(str).str.split(", ").explode()
     st.bar_chart(reason_series.value_counts())
 
 # 📋 Logs
 st.subheader("📋 Logs (Latest 20)")
 st.dataframe(df.tail(20))
 
-# 📁 Retrain History
+# 📁 Retrain History (REMOVED FILE ACCESS → OPTIONAL API LATER)
 st.subheader("📁 Retrain History")
-
-try:
-    with open("../backend/retrain_log.txt", "r") as f:
-        logs = f.read()
-    st.text(logs)
-except:
-    st.text("No retraining history yet...")
+st.info("Retrain history not available in cloud yet")
 
 # 🌍 Attack Map
 st.subheader("🌍 Attack Map")
@@ -115,7 +116,7 @@ if "lat" in df.columns and "lon" in df.columns:
 else:
     st.info("Geo data not available yet")
 
-# 🧠 SHAP Feature Impact (ONLY ONCE ✅)
+# 🧠 SHAP Feature Impact
 st.subheader("🧠 SHAP Feature Impact")
 
 if st.session_state.last_response:
