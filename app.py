@@ -29,6 +29,8 @@ except:
 print("🚀 Starting AI Firewall Server...")
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # 🔥 Database
 conn = sqlite3.connect("database.db", check_same_thread=False)
