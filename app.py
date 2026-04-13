@@ -89,6 +89,43 @@ def unblock():
 def retrain_count_api():
     return jsonify({"retrain_count": retrain_count})
 
+@app.route("/logs", methods=["GET"])
+def get_logs():
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT ip, requests, failed_logins, attack, reason, timestamp, lat, lon
+            FROM logs
+            ORDER BY timestamp DESC
+            LIMIT 100
+        """)
+
+        rows = cursor.fetchall()
+
+        conn.close()
+
+        # ✅ Convert to JSON format
+        data = []
+        for row in rows:
+            data.append({
+                "ip": row[0],
+                "requests": row[1],
+                "failed_logins": row[2],
+                "attack": row[3],
+                "reason": row[4],
+                "timestamp": row[5],
+                "lat": row[6],
+                "lon": row[7]
+            })
+
+        return jsonify(data)
+
+    except Exception as e:
+        print("❌ Logs API Error:", e)
+        return jsonify([])
+
 # 🍯 Honeypot
 @app.route("/admin-login")
 def honeypot():
