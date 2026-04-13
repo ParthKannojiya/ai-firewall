@@ -11,7 +11,7 @@ st.set_page_config(page_title="AI Firewall", layout="wide")
 st.title("🔥 AI Firewall Control Panel")
 
 # 🔥 USE YOUR LIVE RENDER URL HERE
-API_BASE = "https://your-render-app.onrender.com"
+API_BASE = "https://ai-firewall-2df6.onrender.com/"
 
 API_URL = f"{API_BASE}/predict"
 UNBLOCK_URL = f"{API_BASE}/unblock?all=true"
