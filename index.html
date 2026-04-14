@@ -4,10 +4,7 @@
     <title>AI Firewall Dashboard</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -23,41 +20,53 @@
         <input id="fail" type="number" placeholder="Failed Logins" class="form-control mb-2">
         <input id="url" type="text" placeholder="URL" class="form-control mb-2">
         <button onclick="sendRequest()" class="btn btn-danger">🚀 Send Request</button>
-        <p id="result" class="mt-2"></p>
+        <pre id="result" class="mt-2"></pre>
     </div>
 
     <!-- Metrics -->
     <div class="row mt-4">
         <div class="col">
-            <div class="card p-3 bg-success">Total Attacks: <span id="attacks">0</span></div>
+            <div class="card p-3 bg-success">🚨 Attacks: <span id="attacks">0</span></div>
         </div>
         <div class="col">
-            <div class="card p-3 bg-primary">Normal Traffic: <span id="normal">0</span></div>
+            <div class="card p-3 bg-primary">✅ Normal: <span id="normal">0</span></div>
+        </div>
+        <div class="col">
+            <div class="card p-3 bg-warning">🔁 Retrain: <span id="retrain">0</span></div>
         </div>
     </div>
 
-    <!-- Chart -->
-    <div class="mt-4">
-        <canvas id="attackChart"></canvas>
-    </div>
+    <!-- Charts -->
+    <h4 class="mt-4">📈 Attack Types</h4>
+    <canvas id="attackChart"></canvas>
+
+    <h4 class="mt-4">📊 Requests Trend</h4>
+    <canvas id="trendChart"></canvas>
+
+    <h4 class="mt-4">🌍 Attacks by IP</h4>
+    <canvas id="ipChart"></canvas>
+
+    <h4 class="mt-4">🧠 Attack Reasons</h4>
+    <canvas id="reasonChart"></canvas>
 
     <!-- Logs -->
-    <div class="mt-4">
-        <h4>📋 Logs</h4>
-        <table class="table table-dark table-striped" id="logsTable"></table>
+    <h4 class="mt-4">📋 Logs (Latest 20)</h4>
+    <div class="table-responsive">
+        <table class="table table-dark table-bordered" id="logsTable"></table>
     </div>
 
     <!-- Map -->
-    <div class="mt-4">
-        <h4>🌍 Attack Map</h4>
-        <div id="map" style="height:400px;"></div>
-    </div>
+    <h4 class="mt-4">🌍 Attack Map</h4>
+    <div id="map" style="height:400px;"></div>
+
+    <!-- SHAP -->
+    <h4 class="mt-4">🧠 SHAP Feature Impact</h4>
+    <canvas id="shapChart"></canvas>
+
 </div>
 
-<!-- Scripts at END (IMPORTANT) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <script src="script.js"></script>
 
 </body>
