@@ -4,6 +4,7 @@ import sqlite3
 import subprocess
 import threading
 import datetime
+from flask_cors import CORS   # ✅ ADD THIS
 
 from security_utils import (
     check_ip_reputation,
@@ -30,8 +31,6 @@ print("🚀 Starting AI Firewall Server...")
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
-
 # 🔥 Database
 conn = sqlite3.connect("database.db", check_same_thread=False)
 cursor = conn.cursor()
@@ -260,3 +259,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+    
